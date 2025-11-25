@@ -181,18 +181,18 @@ def score(exp_file: str, criteria: str, step: int, dataset_token: str) -> float:
     if criteria == "[AS]":
         os.system(
             f"python3 -m MCCWS.script.postprocess \
-        --original_test_gold_path ./icwb2-data/gold/as_test_gold.utf8 \
+        --original_test_gold_path ./icwb2-data/gold/as_testing_gold.utf8 \
         --test_file ./exp/result/{exp_file}/{step}_{criteria}_{dataset_token}.txt"
         )
         os.system(
             "perl icwb2-data/scripts/score icwb2-data/gold/as_training_words.utf8 \
-      icwb2-data/gold/as_test_gold.utf8 "
+      icwb2-data/gold/as_testing_gold.utf8 "
             + f"exp/result/{exp_file}/{step}_{criteria}_{dataset_token}.txt > score.utf8"
         )
     if criteria == "[CIT]":
         os.system(
             f"python3 -m MCCWS.script.postprocess \
-        --original_test_gold_path ./icwb2-data/gold/cityu_test_gold.utf8 \
+        --original_test_gold_path ./icwb2-data/gold/cityu_testing_gold.utf8 \
         --test_file ./exp/result/{exp_file}/{step}_{criteria}_{dataset_token}.txt"
         )
         os.system(
@@ -203,7 +203,7 @@ def score(exp_file: str, criteria: str, step: int, dataset_token: str) -> float:
     if criteria == "[MSR]":
         os.system(
             f"python3 -m MCCWS.script.postprocess \
-        --original_test_gold_path ./icwb2-data/gold/msr_test_gold.utf8 \
+        --original_test_gold_path ./icwb2-data/gold/msr_testing_gold.utf8 \
         --test_file ./exp/result/{exp_file}/{step}_{criteria}_{dataset_token}.txt"
         )
         os.system(
@@ -214,7 +214,7 @@ def score(exp_file: str, criteria: str, step: int, dataset_token: str) -> float:
     if criteria == "[PKU]":
         os.system(
             f"python3 -m MCCWS.script.postprocess \
-        --original_test_gold_path ./icwb2-data/gold/pku_test_gold.utf8 \
+        --original_test_gold_path ./icwb2-data/gold/pku_testing_gold.utf8 \
         --test_file ./exp/result/{exp_file}/{step}_{criteria}_{dataset_token}.txt"
         )
         os.system(
@@ -225,7 +225,7 @@ def score(exp_file: str, criteria: str, step: int, dataset_token: str) -> float:
     if criteria == "[CTB6]":
         os.system(
             f"python3 -m MCCWS.script.postprocess \
-        --original_test_gold_path ./icwb2-data/gold/ctb6_test_gold.utf8 \
+        --original_test_gold_path ./icwb2-data/gold/ctb6_testing_gold.utf8 \
         --test_file ./exp/result/{exp_file}/{step}_{criteria}_{dataset_token}.txt"
         )
         os.system(
@@ -236,7 +236,7 @@ def score(exp_file: str, criteria: str, step: int, dataset_token: str) -> float:
     if criteria == "[CNC]":
         os.system(
             f"python3 -m MCCWS.script.postprocess \
-        --original_test_gold_path ./icwb2-data/gold/cnc_test_gold.txt \
+        --original_test_gold_path ./icwb2-data/gold/cnc_testing_gold.txt \
         --test_file ./exp/result/{exp_file}/{step}_{criteria}_{dataset_token}.txt"
         )
         os.system(
@@ -247,7 +247,7 @@ def score(exp_file: str, criteria: str, step: int, dataset_token: str) -> float:
     if criteria == "[SXU]":
         os.system(
             f"python3 -m MCCWS.script.postprocess \
-        --original_test_gold_path ./icwb2-data/gold/sxu_test_gold.txt \
+        --original_test_gold_path ./icwb2-data/gold/sxu_testing_gold.txt \
         --test_file ./exp/result/{exp_file}/{step}_{criteria}_{dataset_token}.txt"
         )
         os.system(
@@ -258,7 +258,7 @@ def score(exp_file: str, criteria: str, step: int, dataset_token: str) -> float:
     if criteria == "[UD]":
         os.system(
             f"python3 -m MCCWS.script.postprocess \
-        --original_test_gold_path ./icwb2-data/gold/ud_test_gold.txt \
+        --original_test_gold_path ./icwb2-data/gold/ud_testing_gold.txt \
         --test_file ./exp/result/{exp_file}/{step}_{criteria}_{dataset_token}.txt"
         )
         os.system(
@@ -269,7 +269,7 @@ def score(exp_file: str, criteria: str, step: int, dataset_token: str) -> float:
     if criteria == "[WTB]":
         os.system(
             f"python3 -m MCCWS.script.postprocess \
-        --original_test_gold_path ./icwb2-data/gold/wtb_test_gold.txt \
+        --original_test_gold_path ./icwb2-data/gold/wtb_testing_gold.txt \
         --test_file ./exp/result/{exp_file}/{step}_{criteria}_{dataset_token}.txt"
         )
         os.system(
@@ -280,7 +280,7 @@ def score(exp_file: str, criteria: str, step: int, dataset_token: str) -> float:
     if criteria == "[ZX]":
         os.system(
             f"python3 -m MCCWS.script.postprocess \
-        --original_test_gold_path ./icwb2-data/gold/zx_test_gold.txt \
+        --original_test_gold_path ./icwb2-data/gold/zx_testing_gold.txt \
         --test_file ./exp/result/{exp_file}/{step}_{criteria}_{dataset_token}.txt"
         )
         os.system(
@@ -288,6 +288,8 @@ def score(exp_file: str, criteria: str, step: int, dataset_token: str) -> float:
       icwb2-data/gold/zx_test_gold.txt "
             + f"exp/result/{exp_file}/{step}_{criteria}_{dataset_token}.txt > score.utf8"
         )
+    F1_score = 0.0
+    OOV_recall = 0.0
     with open(f"./score.utf8", "r") as f:
         a = f.readlines(0)
         for string in a[-5:]:

@@ -8,7 +8,7 @@ def set_seed(SEED: int = None):
     """Set the seed use for training.
 
     Args:
-        SEED (int): The seed use for training. \ 
+        SEED (int): The seed use for training. 
                     Defaults to None and checks the value is integer later.
     """
 

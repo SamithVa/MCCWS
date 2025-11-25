@@ -168,6 +168,9 @@ Pipfile
 # sighan2005 dataset
 icwb2-data/
 
+# multi-criteria-cws dataset
+multi-criteria-cws/
+
 # scored result
 score.utf8
 
@@ -175,3 +178,6 @@ score.utf8
 /exp
 
 test_data.py
+
+# bert-base-chinese model
+bert-base-chinese/

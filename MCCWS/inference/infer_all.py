@@ -160,9 +160,12 @@ def main(args):
                                 ans = ""
                         if len(ans) > 0:
                             tmp.append(ans)
-                        if short_input[i] and tmp[-1][-1] != "\n":
-                            tmp.append("\n")
-                        f.write(" ".join(tmp))
+                        # Write the segmented output
+                        output = " ".join(tmp)
+                        # Add newline if this is the end of a complete sentence
+                        if short_input[i] and (not output or output[-1] != "\n"):
+                            output += "\n"
+                        f.write(output)
                 f.close()
 
         model = model.to("cpu")

@@ -70,7 +70,7 @@ def get_args():
     )
     parser.add_argument(
         "--model_name",
-        default=None,
+        default="/data/wanshan/Desktop/learning/AI_Programming/MCCWS/bert-base-chinese",
         help="Select the model from hugging face.",
         type=str,
     )

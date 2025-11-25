@@ -39,23 +39,23 @@ def main(args):
     tmp = list()
 
     for idx, data in enumerate(answer):
+        if idx >= len(predicted):
+            break
 
         sentence = ""
         for char in predicted[idx]:
             if char == "0":
-                end = numbers.search(data).span()[1]
-                sentence += data[
-                    numbers.search(data).span()[0] : numbers.search(data).span()[1]
-                ]
-                data = data[end:]
+                match = numbers.search(data)
+                if match:
+                    end = match.span()[1]
+                    sentence += data[match.span()[0] : match.span()[1]]
+                    data = data[end:]
             elif char == "a":
-                end = english_char.search(data).span()[1]
-                sentence += data[
-                    english_char.search(data)
-                    .span()[0] : english_char.search(data)
-                    .span()[1]
-                ]
-                data = data[end:]
+                match = english_char.search(data)
+                if match:
+                    end = match.span()[1]
+                    sentence += data[match.span()[0] : match.span()[1]]
+                    data = data[end:]
             else:
                 sentence += char
         tmp.append(sentence)
