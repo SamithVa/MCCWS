@@ -16,4 +16,6 @@ CUDA_VISIBLE_DEVICES=3 python -m MCCWS.script.finetune \
     --accumulation_step 2 \
     --start_log 280000 \
     --save_step 1000 \
-    --gpu 0
+    --gpu 0 \
+    --use_wandb \
+    --wandb_project "MCCWS_Finetune"

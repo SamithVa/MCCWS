@@ -5,6 +5,7 @@ import os
 import torch
 import torch.nn as nn
 import transformers
+import wandb
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
@@ -87,6 +88,12 @@ def get_args():
         "--accumulation_step", default=2, help="Gradient accumulation step", type=int
     )
     parser.add_argument("--save_step", default=2000, help="Saving intervals", type=int)
+    parser.add_argument(
+        "--use_wandb", action="store_true", help="Use Weights & Biases for logging"
+    )
+    parser.add_argument(
+        "--wandb_project", default="MCCWS", help="W&B project name", type=str
+    )
 
     return parser.parse_args()
 
@@ -111,6 +118,25 @@ def main(args):
     print(f"Using {DEVICE}")
 
     MCCWS.util.set_seed(args.seed)
+
+    # Initialize wandb if enabled
+    if args.use_wandb:
+        wandb.init(
+            project=args.wandb_project,
+            name=EXP_FILE,
+            config={
+                "learning_rate": args.lr,
+                "epochs": EPOCH,
+                "batch_size": args.batch_size,
+                "model_name": MODEL_NAME,
+                "dropout": args.dropout,
+                "weight_decay": args.weight_decay,
+                "smooth_factor": args.smooth_factor,
+                "replace_rate": args.replace_rate,
+                "accumulation_step": args.accumulation_step,
+                "seed": args.seed,
+            },
+        )
 
     tokenizer = MCCWS.util.load_tokenizer(MODEL_NAME)
 
@@ -236,6 +262,19 @@ def main(args):
                 train_acc = train_acc.item() / (target < 4).sum().item()
                 writer.add_scalar("training_acc", train_acc, count)
                 writer.add_scalar("training_loss", loss, count)
+                
+                # Log to wandb if enabled
+                if args.use_wandb:
+                    wandb.log(
+                        {
+                            "train/accuracy": train_acc,
+                            "train/loss": loss.item(),
+                            "train/learning_rate": scheduler.get_last_lr()[0],
+                            "train/epoch": epoch,
+                        },
+                        step=count,
+                    )
+                
                 train_data.set_description(
                     f"Epoch :{epoch}" + f" loss :{round(loss.item(), 4)}"
                 )
@@ -246,6 +285,10 @@ def main(args):
                         torch.save(model.state_dict(), f)
             count += 1
         # MCCWS.util.valid(model=model, tokenizer=tokenizer, exp_file=EXP_FILE, step=count, device=DEVICE)
+    
+    # Finish wandb run
+    if args.use_wandb:
+        wandb.finish()
 
 
 if __name__ == "__main__":
